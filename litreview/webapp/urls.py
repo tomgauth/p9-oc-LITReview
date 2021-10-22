@@ -18,7 +18,7 @@ from django.urls import path
 from webapp import views
 
 urlpatterns = [
-    path('', views.feed, name="feed"),
+    path('feed', views.feed, name="feed"),
 
     path('tickets', views.list_tickets, name="list_tickets"),
     path('ticket/<int:ticket_id>', views.view_ticket, name="view_ticket"),
