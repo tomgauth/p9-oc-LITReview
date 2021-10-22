@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from webapp.models import Ticket
+from webapp.models import Ticket, UserFollows
 from webapp.forms import TicketForm
 # from itertools import chain
 
@@ -57,3 +57,10 @@ def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, pk=ticket_id)
     ticket.delete()
     return redirect('list_tickets')
+
+
+def followers(request):
+    user_id = 1 # hard coded for testing
+    followers = UserFollows.objects.filter(user=user_id)
+    return render(request, 'my_followers.html', {'followers': followers})
+

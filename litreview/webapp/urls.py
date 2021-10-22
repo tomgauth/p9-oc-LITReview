@@ -25,4 +25,6 @@ urlpatterns = [
     path('create_ticket', views.create_ticket, name="create_ticket"),
     path('create_ticket/<int:ticket_id>', views.create_ticket, name="create_ticket"),
     path('delete_ticket/<int:ticket_id>', views.delete_ticket, name="delete_ticket"),
+
+    path('my_followers', views.followers, name='my_followers'),
 ]
