@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+{% block content %}
+
+
+<ul>
+
+  {% if tickets %}
+
+    <span>Here are all the tickets:</span>
+
+    {% for ticket in tickets  %}
+
+      <li>{{ticket.title}} | <a href="{% url 'create_ticket' ticket_id=ticket.id %}">Modify Ticket</a> | <a href="{% url 'view_ticket' ticket_id=ticket.id %}">View Ticket</a> | <a href="{% url 'delete_ticket' ticket_id=ticket.id %}">Delete Ticket</a></li>
+
+
+    {% endfor %}
+
+  {% else %}
+
+      <span class="text-danger"> No ticket to show!</span>
+
+  {% endif %}
+
+</ul>
+
+<a href="{% url 'create_ticket' %}">Create Ticket</a>
+
+{% endblock content %}

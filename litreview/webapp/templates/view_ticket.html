@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+{% block content %}
+
+
+<h2>{{ticket.title}}</h2>
+
+<p>{{ticket.description}}</p>
+
+<p>{{ticket.time_created}}</p>
+
+{% if ticket.image %}
+
+  <img src="{{ticket.image.url}}" alt="">
+
+{% endif %}
+
+
+
+    {% endblock content %}
