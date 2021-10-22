@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'webapp',
     'auth_app',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -130,7 +131,7 @@ MEDIA_URL = '/media/'
 # Auth
 AUTH_USER_MODEL = 'auth_app.User'
 
-# Redirect for login
+# Redirect for logins
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
