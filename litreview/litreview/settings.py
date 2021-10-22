@@ -129,7 +129,7 @@ MEDIA_URL = '/media/'
 
 
 # Auth
-AUTH_USER_MODEL = 'auth_app.User'
+# AUTH_USER_MODEL = 'auth_app.User'
 
 # Redirect for logins
 LOGIN_REDIRECT_URL = '/'
