@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+{% block content %}
+
+<h2>Create UserFollow</h2>
+
+I am: {{user}}
+
+  <form method="post" action="{% url 'create_user_follow' %}" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {{ form.as_p }}
+
+
+      <input type="submit"/>
+    </form>
+
+    {% endblock content %}

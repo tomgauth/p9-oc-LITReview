@@ -2,32 +2,56 @@
 {% block content %}
 
 
-<h3>Logged in as</h3>
+<h3>My Username:</h3>
 
 {{user}}
+
+
+<h2>Follow sombebody:</h2>
+
+
+<a href="{% url 'create_user_follow' %}">Create UserFollows</a>
+
+
 
 <h2>Follow somebody:</h2>
 
 <br>{{users.all}}
 
-<h2>People I follow: </h2>
+<h2>My Subscriptions</h2>
+
+  {% if subscriptions %}
+
+    <span>Here are all the followers:</span>
+
+    {% for subscription in subscriptions  %}
+
+      <li>{{subscription.followed_user}}</li>
+
+
+    {% endfor %}
+
+  {% else %}
+
+      <span class="text-danger"> No subscriber to show!</span>
+
+  {% endif %}
+
 
 
 <br>
 
-<h2>People following me: </h2>
-
-returns UserFollow objects where user == user
+<h2>My Subscribers: </h2>
 
 <ul>
 
-  {% if followers %}
+  {% if subscribers %}
 
-    <span>Here are all the followers:</span>
+    <span>Here are all my subscribers:</span>
 
-    {% for follower in followers  %}
+    {% for subscriber in subscribers  %}
 
-      <li>{{follower.user}}</li>
+      <li>{{subscriber.user}}</li>
 
 
     {% endfor %}

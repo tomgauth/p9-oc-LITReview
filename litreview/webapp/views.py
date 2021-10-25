@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from webapp.models import Ticket, UserFollows
-from webapp.forms import TicketForm
+from webapp.forms import TicketForm, UserFollowForm
 # from itertools import chain
 
 # Create your views here.
@@ -60,7 +60,16 @@ def delete_ticket(request, ticket_id):
 
 
 def followers(request):
-    user_id = 1 # hard coded for testing
-    followers = UserFollows.objects.filter(user=user_id)
-    return render(request, 'my_followers.html', {'followers': followers})
+    user_id = request.user.id  # hard coded for testing
+    subscribers = UserFollows.objects.filter(followed_user=user_id)
+    subscriptions = UserFollows.objects.filter(user=user_id)
+    return render(request, 'my_followers.html', {'subscribers': subscribers,
+                                                 'subscriptions': subscriptions})
 
+
+def create_user_follow(request):
+    user_follow_instance = None
+    # createUserFollowForm
+    form = UserFollowForm(request.POST, instance=user_follow_instance)
+    return render(request, 'create_user_follow.html', locals())
+    pass

@@ -27,4 +27,5 @@ urlpatterns = [
     path('delete_ticket/<int:ticket_id>', views.delete_ticket, name="delete_ticket"),
 
     path('my_followers', views.followers, name='my_followers'),
+    path('create_user_follow', views.create_user_follow, name='create_user_follow')
 ]
