@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from webapp.models import Ticket, UserFollows
 from webapp.forms import TicketForm, UserFollowForm
-# from itertools import chain
+from django.contrib.auth.models import User
+from itertools import chain
 
 # Create your views here.
 
@@ -68,8 +69,20 @@ def followers(request):
 
 
 def create_user_follow(request):
-    user_follow_instance = None
-    # createUserFollowForm
-    form = UserFollowForm(request.POST, instance=user_follow_instance)
-    return render(request, 'create_user_follow.html', locals())
-    pass
+    user_follow_instance = UserFollows()
+    if request.method == "GET":
+        user = request.user
+        form = UserFollowForm()
+        # get the ids of users already followed
+        already_followed = [pair.followed_user.id for pair in UserFollows.objects.filter(user=user)]
+        # remove the already followed users and the current user from the options
+        options = User.objects.all().exclude(id__in=already_followed).exclude(id=user.id)
+        result_list = list(chain(options, already_followed))
+        form.fields['followed_user'].queryset = options
+        return render(request, 'create_user_follow.html', locals())
+    elif request.method == "POST":
+        user_follow_instance.user = request.user
+        form = UserFollowForm(request.POST, instance=user_follow_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('my_followers')
