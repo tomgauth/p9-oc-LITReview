@@ -28,5 +28,12 @@ urlpatterns = [
 
     path('my_followers', views.followers, name='my_followers'),
     path('create_user_follow', views.create_user_follow, name='create_user_follow'),
-    path('create_user_follow/<int:user_id>', views.create_user_follow, name='create_user_follow')
+    path('create_user_follow/<int:user_id>', views.create_user_follow, name='create_user_follow'),
+
+    path('my_reviews', views.my_reviews, name='my_reviews'),
+    path('edit_review/<int:review_id>', views.edit_review, name="edit_review"),
+    path('delete_review/<int:review_id>', views.delete_review, name="delete_review"),
+
+    path('write_review_ticket', views.write_review_ticket, name='write_review_ticket'),
+    path('write_review_ticket/<int:ticket_id>', views.write_review_ticket, name='write_review_ticket'),
 ]

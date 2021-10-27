@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from webapp.models import Ticket, UserFollows
-from webapp.forms import TicketForm, UserFollowForm
+from webapp.models import Ticket, UserFollows, Review
+from webapp.forms import TicketForm, UserFollowForm, ReviewForm
 from django.contrib.auth.models import User
 from itertools import chain
 
@@ -61,7 +61,7 @@ def delete_ticket(request, ticket_id):
 
 
 def followers(request):
-    user_id = request.user.id  # hard coded for testing
+    user_id = request.user.id
     subscribers = UserFollows.objects.filter(followed_user=user_id)
     subscriptions = UserFollows.objects.filter(user=user_id)
     return render(request, 'my_followers.html', {'subscribers': subscribers,
@@ -74,15 +74,78 @@ def create_user_follow(request):
         user = request.user
         form = UserFollowForm()
         # get the ids of users already followed
-        already_followed = [pair.followed_user.id for pair in UserFollows.objects.filter(user=user)]
+        already_followed = [
+            pair.followed_user.id for pair in UserFollows.objects.filter(user=user)]
         # remove the already followed users and the current user from the options
         options = User.objects.all().exclude(id__in=already_followed).exclude(id=user.id)
         result_list = list(chain(options, already_followed))
         form.fields['followed_user'].queryset = options
         return render(request, 'create_user_follow.html', locals())
     elif request.method == "POST":
-        user_follow_instance.user = request.user
+        user_follow_instance.user = user
         form = UserFollowForm(request.POST, instance=user_follow_instance)
         if form.is_valid():
             form.save()
             return redirect('my_followers')
+
+
+def my_reviews(request):
+    user = request.user
+    reviews = Review.objects.all().filter(user_id=user.id)
+    return render(request, 'my_reviews.html', {'reviews': reviews})
+
+
+# def create_review(request, review_id=None):
+#     review_instance = Review.objects.get(
+#         pk=review_id) if review_id is not None else None
+#     if request.method == "GET":
+#         form = ReviewForm(instance=review_instance)
+#         return render(request, 'create_review.html', locals())
+#     elif request.method == "POST":
+#         form = ReviewForm(request.POST, request.FILES,
+#                           instance=review_instance)
+#         if form.is_valid():
+#             ticket = form.save()
+#             return redirect('my_reviews')
+
+
+def write_review_ticket(request, ticket_id):
+    review_instance = Review()
+    user = request.user
+    ticket_instance = Ticket.objects.get(
+        pk=ticket_id)
+    review_instance.ticket = ticket_instance
+    review_instance.user = user
+    form = ReviewForm(instance=review_instance)
+    if request.method == "GET":
+        return render(request, 'write_review_ticket.html', locals())
+    elif request.method == "POST":
+        form = ReviewForm(request.POST, instance=review_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('my_reviews')
+
+
+def edit_review(request, review_id):
+    review_instance = Review.objects.get(pk=review_id)
+    if request.method == "GET":
+        form = ReviewForm(instance=review_instance)
+        return render(request, 'edit_review.html', locals())
+    elif request.method == "POST":
+        form = ReviewForm(request.POST,
+                      instance=review_instance)
+    if form.is_valid():
+        form.save()
+        return redirect('my_reviews')
+
+
+
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    review.delete()
+    return redirect('my_reviews')
+
+
+
+
+

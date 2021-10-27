@@ -1,5 +1,5 @@
 from django.forms import ModelForm, ChoiceField
-from webapp.models import Ticket, UserFollows
+from webapp.models import Ticket, UserFollows, Review
 
 
 class TicketForm(ModelForm):
@@ -15,3 +15,8 @@ class UserFollowForm(ModelForm):
         # field = ChoiceField(choices = ('a','b','c'))
         fields = ['followed_user']
 
+
+class ReviewForm(ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'headline', 'body']

@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+{% block content %}
+
+
+<ul>
+
+  {% if reviews %}
+
+    <span>Here are all my reviews:</span>
+
+    {% for review in reviews  %}
+
+      <li>
+        <h4>{{review.ticket.title}}</h4>
+        <p>asked by: {{review.ticket.user}}</p>
+
+        <h4>review by {{review.user}}</h4>
+        <p>{{review.time_created}}</p>
+        <h4>{{review.headline}}</h4>
+        <p>rating: {{review.rating}}</p>
+        <p>{{review.body}}</p>
+        <a href="{% url 'edit_review' review_id=review.id %}">Edit Review</a>
+        <a href="{% url 'delete_review' review_id=review.id %}">Delete Review</a>
+
+      </li>
+
+
+    {% endfor %}
+
+  {% else %}
+
+      <span class="text-danger"> No review to show!</span>
+
+  {% endif %}
+
+</ul>
+
+
+{% endblock content %}

@@ -1,0 +1,37 @@
+{% extends "main.html" %}
+{% block content %}
+
+{% if review_instance.ticket %}
+
+<h1> Ticket: {{review_instance.ticket.id}}</h1>
+
+<h2>Reviewing: {{review_instance.ticket.title}}</h2>
+
+<p>asked by: {{review_instance.ticket.user}}</p>
+<p>on: {{review_instance.ticket.time_created}}</p>
+{{review_instance.ticket.body}}
+
+{% if  review_instance.ticket.image %}
+
+<img src="{{review_instance.ticket.image.url }}" alt="">
+
+{% endif %}
+
+{% endif %}
+
+
+<p>form instance id{{form.instance.id}}</p>
+
+
+  <h2>Modify review {{form.instance.id}}</h2>
+  <form method="post" action="{% url 'edit_review' review_id=form.instance.id %}" enctype="multipart/form-data">
+
+
+      {% csrf_token %}
+      {{ form.as_p }}
+
+
+      <input type="submit"/>
+    </form>
+
+    {% endblock content %}
