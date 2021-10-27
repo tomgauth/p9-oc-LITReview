@@ -9,8 +9,22 @@
 
 <h2>Follow sombebody:</h2>
 
+---------------------------------
+<h2>Create UserFollow</h2>
 
-<a href="{% url 'create_user_follow' %}">Create UserFollows</a>
+My username: {{user}}
+
+  <form method="post" action="{% url 'my_followers' %}" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {{ form.as_p }}
+
+
+      <input type="submit"/>
+    </form>
+
+---------------------------------
+
 
 
 <h2>My Subscriptions</h2>
@@ -21,7 +35,7 @@
 
     {% for subscription in subscriptions  %}
 
-      <li>{{subscription.followed_user}}</li>
+      <li>{{subscription.followed_user}} | <a href="{% url 'delete_user_follow' user_follow_id=subscription.id %}">Unsubscribe</a></li>
 
 
     {% endfor %}

@@ -123,6 +123,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# folder with bootstrap
+STATIC_ROOT = os.path.join(BASE_DIR, 'boot')
+
 # Making media upload
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
