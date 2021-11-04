@@ -5,12 +5,12 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
+Hi {{ user.username }}!
+<p><a href="{% url 'logout' %}">Log Out</a></p>
 {% else %}
 
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
 
 {% endif %}
 
@@ -19,18 +19,20 @@
     <div class="col">
       <div class="p-3 border bg-light">
         <div class="mb-3">
-        <h2>Sign-up Now</h2>
-        <button type="button" class="btn btn-primary">Sign Up</button>
-          </div>
+          <h2>Sign-up Now</h2>
+          <a href="{% url 'signup' %}">
+            <button type="button" class="btn btn-primary">Sign Up</button>
+          </a>
+        </div>
 
       </div>
     </div>
     <div class="col">
-       <div class="basic">
-          {% include "registration/login.html" with form=login %}
-      </div>
+     <div class="basic">
+      {% include "registration/login.html" with form=login %}
     </div>
   </div>
+</div>
 </div>
 
 
