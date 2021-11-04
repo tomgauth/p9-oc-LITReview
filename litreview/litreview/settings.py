@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'webapp',
     'auth_app',
     'accounts',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +126,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # folder with bootstrap
-STATIC_ROOT = os.path.join(BASE_DIR, 'boot')
+STATIC_ROOT = os.path.join(BASE_DIR, 'root')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'boot')
+]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Making media upload
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -1,17 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}auth_app Login{% endblock %}
 
 {% block content %}
 
-<h2>Log In</h2>
+<div class="p-3 border bg-light">
+
+<h2>auth_app Log In</h2>
 
 <form method="post">
 
   {% csrf_token %}
-  {{ form.as_p }}
 
-  <button type="submit">Log In</button>
 
-</form>
+          <div class="form-group">
+            <label for="UserNameInput" class="form-label">User Name</label>
+            <input type="text" class="form-control" name="username">
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+
+</div>
 {% endblock %}
+

@@ -1,22 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'main.html' %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-      One of three columns
-    </div>
-    <div class="col-sm">
-      One of three columns
-    </div>
-    <div class="col-sm">
-      One of three columns
-    </div>
-  </div>
-</div>
 
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
@@ -27,5 +13,26 @@
   <a href="{% url 'login' %}">Log In</a>
 
 {% endif %}
+
+<div class="container display: grid">
+  <div class="row gx-5">
+    <div class="col">
+      <div class="p-3 border bg-light">
+        <div class="mb-3">
+        <h2>Sign-up Now</h2>
+        <button type="button" class="btn btn-primary">Sign Up</button>
+          </div>
+
+      </div>
+    </div>
+    <div class="col">
+       <div class="basic">
+          {% include "registration/login.html" with form=login %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 {% endblock %}

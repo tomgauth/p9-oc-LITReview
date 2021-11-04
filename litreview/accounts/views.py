@@ -10,6 +10,5 @@ class SignUpView(generic.CreateView):
     template_name = 'registration/signup.html'
 
 
-
 def home(request):
     return redirect('home')
