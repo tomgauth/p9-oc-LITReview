@@ -1,0 +1,71 @@
+
+<div class="container p-4 my-4 border">
+
+<!--- Review -->
+  <div class="card-body">
+    {% if review.user == user %}
+
+
+       <h6 class="card-subtitle mb-2 text-muted">You wrote a review!</h6>
+
+    {% else %}
+
+    <h6 class="card-subtitle mb-2 text-muted">{{review.user}} wrote a review!</h6>
+
+    {% endif %}
+
+    <p class="card-text float-right">{{review.time_created}}</p>
+    <br>
+    <h5 class="card-title">{{review.headline}}</h5>
+
+    <div class="rating">
+
+        {% with ''|center:review.rating as range %}
+        {% for _ in range %}
+             <i class="bi bi-star-fill"></i>
+        {% endfor %}
+        {% endwith %}
+    </div>
+    <br>
+    <h6 class="card-subtitle mb-2 text-muted">{{review.body}}</h6>
+
+  </div>
+
+
+
+<!--- Ticket -->
+
+<div class="card" style="">
+  {% if ticket.image %}
+
+    <img class="card-img-top embed-responsive-item" src="{{ticket.image.url}}" role="img" preserveAspectRatio="xMidYMid slice"></img>
+
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{review.ticket.title}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">asked by: {{review.ticket.user}}</h6>
+    <p class="card-text">{{review.ticket.description}}</p>
+
+
+{% if ticket in tickets_reviewed_by_user %}
+  <p>You have already reviewed this ticket!</p>
+
+{% else %}
+
+    <a href="{% url 'write_review_ticket' ticket_id=1%}" >
+      <button class="btn btn-primary btn-large">
+        Write a review
+      </button>
+    </a>
+
+{% endif %}
+
+
+  </div>
+</div>
+
+
+
+
+<br>
+</div>

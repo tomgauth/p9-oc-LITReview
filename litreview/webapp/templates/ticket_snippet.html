@@ -1,0 +1,28 @@
+
+<div class="card">
+  {% if ticket.image.url %}
+
+    <img class="card-img-top" width="100%" src="{{ticket.image.url}}" role="img" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ticket.title}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">asked by: {{ticket.user}}</h6>
+    <h6 class="card-subtitle mb-2 text-muted">date: {{ticket.time_created}}</h6>
+    <p class="card-text">{{ticket.description}}</p>
+
+    {% if ticket in tickets_reviewed_by_user %}
+      <p>You have already reviewed this ticket!</p>
+
+    {% else %}
+
+        <a href="{% url 'write_review_ticket' ticket_id=1%}" >
+          <button class="btn btn-primary btn-large">
+            Write a review
+          </button>
+        </a>
+
+    {% endif %}
+
+  </div>
+</div>

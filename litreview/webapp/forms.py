@@ -12,7 +12,6 @@ class TicketForm(ModelForm):
 class UserFollowForm(ModelForm):
     class Meta:
         model = UserFollows
-        # field = ChoiceField(choices = ('a','b','c'))
         fields = ['followed_user']
 
 

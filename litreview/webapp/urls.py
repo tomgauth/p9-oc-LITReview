@@ -27,8 +27,8 @@ urlpatterns = [
     path('delete_ticket/<int:ticket_id>', views.delete_ticket, name="delete_ticket"),
 
     path('my_followers', views.followers, name='my_followers'),
-    path('create_user_follow', views.create_user_follow, name='create_user_follow'),
-    path('create_user_follow/<int:user_id>', views.create_user_follow, name='create_user_follow'),
+    # path('create_user_follow', views.create_user_follow, name='create_user_follow'),
+    # path('create_user_follow/<int:user_id>', views.create_user_follow, name='create_user_follow'),
     path('delete_user_follow/<int:user_follow_id>', views.delete_user_follow, name="delete_user_follow"),
 
     path('my_reviews', views.my_reviews, name='my_reviews'),

@@ -2,76 +2,129 @@
 {% block content %}
 
 
-<h3>My Username:</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-10">
+      <div class="container p-4 my-4 border rounded">
 
-{{user}}
-
-
-<h2>Follow sombebody:</h2>
-
----------------------------------
-<h2>Create UserFollow</h2>
-
-My username: {{user}}
-
-  <form method="post" action="{% url 'my_followers' %}" enctype="multipart/form-data">
-
-      {% csrf_token %}
-      {{ form.as_p }}
-
-
-      <input type="submit"/>
-    </form>
-
----------------------------------
+        <h3>My Username: {{user}}</h3>
 
 
 
-<h2>My Subscriptions</h2>
+        <div class="container p-2 my-2 border">
 
-  {% if subscriptions %}
+          <h4>Follow another user</h4>
 
-    <span>Here are all the followers:</span>
+          <p>current found_user: {{found_user}}</p>
 
-    {% for subscription in subscriptions  %}
+          <form method="post" action="{% url 'my_followers' %}" enctype="multipart/form-data">
 
-      <li>{{subscription.followed_user}} | <a href="{% url 'delete_user_follow' user_follow_id=subscription.id %}">Unsubscribe</a></li>
-
-
-    {% endfor %}
-
-  {% else %}
-
-      <span class="text-danger"> No subscriber to show!</span>
-
-  {% endif %}
+            {% csrf_token %}
 
 
 
-<br>
+            <div class="form-group">
+                <label for="searched" class="form-label">Enter user name to follow</label>
+                <input class="form-control form-control-lg" type="text" name="searched" value={{searched}}>
+            </div>
 
-<h2>My Subscribers: </h2>
+             <button type="submit" class="btn btn-primary">Follow</button>
+          </form>
 
-<ul>
+          {% if error_message %}
 
-  {% if subscribers %}
+              <span class="text-danger"> {{error_message}}</span>
 
-    <span>Here are all my subscribers:</span>
+          {% elif searched and found_user %}
 
-    {% for subscriber in subscribers  %}
+              <p>you're now following {{found_user}}!</p>
 
-      <li>{{subscriber.user}}</li>
+          {% elif searched and not found_user %}
+
+              <span class="text-danger"> No user found with this name!</span>
+
+          {% else %}
+
+              <p>Enter a user name</p>
+
+          {% endif %}
 
 
-    {% endfor %}
 
-  {% else %}
+        </div>
 
-      <span class="text-danger"> No Follower to show!</span>
+        <div class="container p-2 my-2 border">
 
-  {% endif %}
+          <h4>My Subscriptions</h4>
 
-</ul>
+          <br>
+
+          {% if subscriptions %}
+
+          <span>Here are the people I follow:</span>
+
+          <table class="table">
+            <tbody>
+              {% for subscription in subscriptions  %}
+              <tr>
+                <td>{{subscription.followed_user}}</td>
+                <td class="text-right">
+                <a href="{% url 'delete_user_follow' user_follow_id=subscription.id %}">Unsubscribe</a>
+                </td>
+              </tr>
+
+          {% endfor %}
+
+            </tbody>
+          </table>
+
+          {% else %}
+
+          <span class="text-danger"> No subscriber to show!</span>
+
+          {% endif %}
+
+        </div>
+
+        <div class="container p-2 my-2 border">
+
+          <h4>My Subscribers: </h4>
+
+
+            {% if subscribers %}
+
+            <span>People following me:</span>
+
+             <table class="table">
+                <tbody>
+
+            {% for subscriber in subscribers  %}
+
+            <tr>
+              <td>{{subscriber.user}}</td>
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+          </table>
+
+            {% else %}
+
+            <span class="text-danger"> No Follower to show!</span>
+
+            {% endif %}
+
+        </div>
+      </div>
+    </div>
+    <div class="col-1">
+    </div>
+  </div>
+</div>
+
 
 
 {% endblock content %}

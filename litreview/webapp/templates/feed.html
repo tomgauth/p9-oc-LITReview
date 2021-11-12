@@ -1,28 +1,34 @@
 {% extends "main.html" %}
 {% block content %}
 
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
+
 
 <ul>
-
-  {% if posts %}
-
-
-    {% for post in posts %}
-
-      <li><h3>{{post.title}}</h3>
-        <p>{{post.content}}</p>
-
-      </li>
+{% if posts %}
 
 
+{% for post in posts %}
+    {% if post.type == 'TICKET' %}
+        {% include 'ticket_snippet.html' with ticket=post %}
+    {% elif post.type == 'REVIEW' %}
+        {% include 'review_snippet.html' with review=post ticket=post.ticket %}
+    {% endif %}
+{% endfor %}
 
-    {% endfor %}
 
 {% else %}
 
 <h1>No posts !</h1>
 
 {% endif %}
-</ul>
+
+            </div>
+            <div class="clo-md-3">
+            </div>
+        </div>
 
 {% endblock content %}
