@@ -79,7 +79,9 @@ def create_ticket(request, ticket_id=None):
         form = TicketForm(request.POST, request.FILES,
                           instance=ticket_instance)
         if form.is_valid():
-            ticket = form.save()
+            obj = form.save(commit = False)
+            obj.user_id = request.user.id
+            obj.save()
             return redirect('list_tickets')
 
 
@@ -116,7 +118,7 @@ def followers(request):
         searched = request.POST['searched']
         # users = options.get(username__contains=searched)
         try:
-            found_user = User.objects.get(username=searched.capitalize())
+            found_user = User.objects.get(username__iexact=searched)
             user_follow_instance.user = user
             user_follow_instance.followed_user = found_user
             if user != found_user:
@@ -143,21 +145,46 @@ def my_reviews(request):
     return render(request, 'my_reviews.html', {'reviews': reviews})
 
 
+def write_review_and_ticket(request, ticket_id=None, review_id=None):
+    ticket_instance = Ticket.objects.get(
+        pk=ticket_id) if ticket_id is not None else None
+    review_instance = Review.objects.get(
+        pk=review_id) if review_id is not None else None
+    if request.method == "GET":
+        ticket_form = TicketForm(instance=ticket_instance)
+        review_form = ReviewForm(instance=review_instance)
+        return render(request, 'write_review_and_ticket.html', locals())
+    elif request.method == "POST":
+        ticket_form = TicketForm(request.POST, request.FILES,
+                          instance=ticket_instance)
+        review_form = ReviewForm(request.POST, request.FILES,
+                          instance=review_instance)
+        if ticket_form.is_valid() and review_form.is_valid():
+            ticket_obj = ticket_form.save(commit = False)
+            ticket_obj.user_id = request.user.id
+            ticket_obj.save()
+            review_obj = review_form.save(commit = False)
+            review_obj.user_id = request.user.id
+            review_obj.ticket = ticket_obj
+            review_obj.save()
+            return redirect('list_tickets')
+
+
 def write_review_ticket(request, ticket_id):
-    review_instance = Review()
-    user = request.user
     ticket_instance = Ticket.objects.get(
         pk=ticket_id)
-    review_instance.ticket = ticket_instance
-    review_instance.user = user
-    form = ReviewForm(instance=review_instance)
     if request.method == "GET":
+        form = ReviewForm()
         return render(request, 'write_review_ticket.html', locals())
     elif request.method == "POST":
         form = ReviewForm(request.POST, instance=review_instance)
+        form.ticket = ticket_instance
         if form.is_valid():
-            form.save()
+            review_obj = form.save(commit = False)
+            review_obj.user_id = request.user.id
+            review_obj.save()
             return redirect('my_reviews')
+
 
 
 def edit_review(request, review_id):

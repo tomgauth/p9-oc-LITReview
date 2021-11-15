@@ -2,18 +2,67 @@
 {% block content %}
 
 
-{% if form.instance.id %}
-  <h2>Modify ticket {{form.instance.id}}</h2>
-  <form method="post" action="{% url 'create_ticket' ticket_id=form.instance.id %}" enctype="multipart/form-data">
-{% else %}
-  <form method="post" action="{% url 'create_ticket' %}" enctype="multipart/form-data">
-    <h2>Create ticket</h2>
-{% endif %}
-      {% csrf_token %}
-      {{ form.as_p }}
+<div class="row">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-10">
 
 
-      <input type="submit"/>
-    </form>
+    <div class="container p-4 my-4 border rounded">
 
-    {% endblock content %}
+
+      {% if form.instance.id %}
+
+      <h2>Modify ticket {{form.instance.id}}</h2>
+      <form method="post" action="{% url 'create_ticket' ticket_id=form.instance.id %}" enctype="multipart/form-data">
+
+        {% else %}
+        <h2>Create ticket</h2>
+        <form method="post" action="{% url 'create_ticket' %}" enctype="multipart/form-data">
+
+
+          {% endif %}
+
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <textarea name="title" class="form-control" id="title" rows="1">{{form.instance.title}}</textarea>
+          </div>
+          <div class="mb-3">
+
+            <div class="form-floating">
+              <label for="description" class="form-label">Description</label>
+              <textarea name="description" class="form-control" placeholder="Write your ticket request here" id="id_description" style="height: 100px">{{form.instance.description}}</textarea>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              {% if form.instance.image %}
+                <img src={{form.instance.image.url}} class="img-fluid" alt="Responsive image">
+              </br>
+                <label for="image">Replace image: </label>
+              {% else %}
+              <label for="image">Upload a file</label>
+              {% endif %}
+              <input type="file" class="form-control-file" name="image" id="image">
+            </div>
+          </div>
+
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+
+      </div>
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+
+
+
+
+
+
+  {% endblock content %}

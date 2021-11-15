@@ -17,8 +17,6 @@
 
           <h4>Follow another user</h4>
 
-          <p>current found_user: {{found_user}}</p>
-
           <form method="post" action="{% url 'my_followers' %}" enctype="multipart/form-data">
 
             {% csrf_token %}

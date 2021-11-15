@@ -5,7 +5,7 @@ from webapp.models import Ticket, UserFollows, Review
 class TicketForm(ModelForm):
     class Meta:
         model = Ticket
-        fields = ['title', 'description', 'image', 'user']
+        fields = ['title', 'description', 'image']
 
 
 

@@ -7,35 +7,41 @@
   </div>
   <div class="col-md-10">
 
+
     <div class="container p-4 my-4 border rounded">
 
-    <div class="card">
-
-      {{ticket_instance.id}}
-      {% if ticket_instance.image.url %}
-
-        <img class="card-img-top" width="100%" src="{{ticket_instance.image.url}}" role="img" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
-
-      {% endif %}
-      <div class="card-body">
-        <h5 class="card-title">{{ticket_instance.title}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">asked by: {{ticket_instance.user}}</h6>
-        <h6 class="card-subtitle mb-2 text-muted">date: {{ticket_instance.time_created}}</h6>
-        <p class="card-text">{{ticket_instance.description}}</p>
-
+      <h2>Create ticket</h2>
+      <form method="post" action="{% url 'write_review_and_ticket' %}" enctype="multipart/
+      form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <textarea name="title" class="form-control" id="title" rows="1">{{ticket_form.instance.title}}</textarea>
+      </div>
+      <div class="mb-3">
+        <div class="form-floating">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="description" class="form-control" placeholder="Write your ticket request here" id="id_description" style="height: 100px">{{ticket_form.instance.description}}</textarea>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="form-group">
+          {% if ticket_form.instance.image %}
+          <img src={{ticket_form.instance.image.url}} class="img-fluid" alt="Responsive image">
+        </br>
+        <label for="image">Replace image: </label>
+        {% else %}
+        <label for="image">Upload a file</label>
+        {% endif %}
+        <input type="file" class="form-control-file" name="image" id="image">
       </div>
     </div>
 
-
     <div class="container p-4 my-4 border rounded">
-      <form method="post" action="{% url 'write_review_and_ticket' %}" enctype="multipart/
-      form-data">
-
-      {% csrf_token %}
 
       <h2>Create review</h2>
 
-      <p>ticket: {{ticket_instance}}</p>
+      <p>ticket</p>
 
       <div class="mb-3">
 
