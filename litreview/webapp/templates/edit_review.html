@@ -1,37 +1,103 @@
 {% extends "main.html" %}
 {% block content %}
 
-{% if review_instance.ticket %}
+<div class="row">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-10">
 
-<h1> Ticket: {{review_instance.ticket.id}}</h1>
+    <div class="container p-4 my-4 border rounded">
 
-<h2>Reviewing: {{review_instance.ticket.title}}</h2>
+      <div class="card">
 
-<p>asked by: {{review_instance.ticket.user}}</p>
-<p>on: {{review_instance.ticket.time_created}}</p>
-{{review_instance.ticket.body}}
+        {% if review_instance.ticket.image %}
 
-{% if  review_instance.ticket.image %}
+        <img class="card-img-top" width="100%" src="{{review_instance.ticket.image.url}}" role="img" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
 
-<img src="{{review_instance.ticket.image.url }}" alt="">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{review_instance.ticket.title}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">asked by: {{review_instance.ticket.user}}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">date: {{review_instance.ticket.time_created}}</h6>
+          <p class="card-text">{{review_instance.ticket.description}}</p>
 
-{% endif %}
-
-{% endif %}
-
-
-<p>form instance id{{form.instance.id}}</p>
-
-
-  <h2>Modify review {{form.instance.id}}</h2>
-  <form method="post" action="{% url 'edit_review' review_id=form.instance.id %}" enctype="multipart/form-data">
+        </div>
+      </div>
 
 
-      {% csrf_token %}
-      {{ form.as_p }}
+      <div class="container p-4 my-4 border rounded">
+        <form method="post" action="{% url 'edit_review' review_id=review_instance.id %}" enctype="multipart/
+        form-data">
+
+        {% csrf_token %}
+
+        <h2>Edit review</h2>
+
+        <p>ticket: {{review_instance.ticket}}</p>
+
+        <div class="mb-3">
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="inlineRadio0" value="0" {% if rating == 0 %} checked {% endif %}>
+            <label class="form-check-label" for="inlineRadio0">0</label>
+          </div>
 
 
-      <input type="submit"/>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="inlineRadio1" value="1" {% if rating == 1 %} checked {% endif %}>
+            <label class="form-check-label" for="inlineRadio1">1</label>
+          </div>
+
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="inlineRadio2" value="2" {% if rating == 2 %} checked {% endif %}>
+            <label class="form-check-label" for="inlineRadio2">2</label>
+          </div>
+
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="inlineRadio3" value="3" {% if rating == 3 %} checked {% endif %}>
+            <label class="form-check-label" for="inlineRadio3">3</label>
+          </div>
+
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="inlineRadio4" value="4" {% if rating == 4 %} checked {% endif %}>
+            <label class="form-check-label" for="inlineRadio4">4</label>
+          </div>
+
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="inlineRadio5" value="5" {% if rating == 5 %} checked {% endif %}>
+            <label class="form-check-label" for="inlineRadio5">5</label>
+          </div>
+
+
+
+        </div>
+
+        <div class="mb-3">
+          <label for="headline" class="form-label">Headline</label>
+          <textarea name="headline" class="form-control" id="headline" rows="1">{{review_instance.headline}}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Body</label>
+          <div class="form-floating">
+            <textarea name="body" class="form-control" placeholder="Write your description here" id="body" style="height: 100px">{{review_instance.body}}</textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
+</div>
+<div class="col-md-1">
+</div>
 
-    {% endblock content %}
+
+
+
+{% endblock content %}

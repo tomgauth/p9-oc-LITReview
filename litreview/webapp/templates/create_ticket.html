@@ -39,30 +39,30 @@
           <div class="mb-3">
             <div class="form-group">
               {% if form.instance.image %}
-                <img src={{form.instance.image.url}} class="img-fluid" alt="Responsive image">
-              </br>
-                <label for="image">Replace image: </label>
-              {% else %}
-              <label for="image">Upload a file</label>
-              {% endif %}
-              <input type="file" class="form-control-file" name="image" id="image">
-            </div>
+              <img src={{form.instance.image.url}} class="img-fluid" alt="Responsive image">
+            </br>
+            <label for="image">Replace image: </label>
+            {% else %}
+            <label for="image">Upload a file</label>
+            {% endif %}
+            <input type="file" class="form-control-file" name="image" id="image">
           </div>
+        </div>
 
 
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
 
 
-      </div>
-    </div>
-    <div class="col-md-1">
     </div>
   </div>
+  <div class="col-md-1">
+  </div>
+</div>
 
 
 
 
 
 
-  {% endblock content %}
+{% endblock content %}

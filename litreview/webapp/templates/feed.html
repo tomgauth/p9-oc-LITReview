@@ -7,7 +7,20 @@
             <div class="col-md-6">
 
 
-<ul>
+<div class="container p-4 my-4 border">
+    <a href="{% url 'create_ticket' %}" >
+      <button class="btn btn-primary btn-large">
+        Ask for a review
+      </button>
+    </a>
+
+    <a href="{% url 'write_review_and_ticket' %}" >
+      <button class="btn btn-primary btn-large">
+        Write a review
+      </button>
+    </a>
+</div>
+
 {% if posts %}
 
 

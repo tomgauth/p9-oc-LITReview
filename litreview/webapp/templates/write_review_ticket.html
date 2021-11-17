@@ -28,7 +28,7 @@
 
 
     <div class="container p-4 my-4 border rounded">
-      <form method="post" action="{% url 'write_review_and_ticket' %}" enctype="multipart/
+      <form method="post" action="{% url 'write_review_ticket' ticket_id=ticket_instance.id %}" enctype="multipart/
       form-data">
 
       {% csrf_token %}

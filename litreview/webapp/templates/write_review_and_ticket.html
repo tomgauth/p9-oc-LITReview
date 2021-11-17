@@ -11,8 +11,7 @@
     <div class="container p-4 my-4 border rounded">
 
       <h2>Create ticket</h2>
-      <form method="post" action="{% url 'write_review_and_ticket' %}" enctype="multipart/
-      form-data">
+      <form method="post" action="{% url 'write_review_and_ticket' %}" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -28,14 +27,15 @@
         <div class="form-group">
           {% if ticket_form.instance.image %}
           <img src={{ticket_form.instance.image.url}} class="img-fluid" alt="Responsive image">
-        </br>
-        <label for="image">Replace image: </label>
-        {% else %}
-        <label for="image">Upload a file</label>
-        {% endif %}
-        <input type="file" class="form-control-file" name="image" id="image">
+          <label for="image">Replace image: </label>
+          {% else %}
+          <label for="image">Upload a file</label>
+          {% endif %}
+          <input type="file" class="form-control-file" name="image" id="image">
+        </div>
       </div>
     </div>
+
 
     <div class="container p-4 my-4 border rounded">
 

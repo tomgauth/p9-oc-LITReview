@@ -24,12 +24,6 @@ def feed(request):
             review.type = 'REVIEW'
         return reviews
 
-    def get_user_reviewed_tickets(user, user_reviews):
-        user_reviewed_tickets = []
-        for user_review in user_reviews:
-            user_reviewed_tickets.append(user_review.ticket)
-        return user_reviewed_tickets
-
     def get_users_viewable_tickets(user, followed_users_ids):
         user_reviews = Review.objects.all().filter(user_id=user.id)
         user_tickets = Ticket.objects.all().filter(user_id=user.id)
@@ -42,12 +36,21 @@ def feed(request):
             # if the user is one of the users in ticket.reviews
         return tickets
 
+    def get_tickets_reviewed_by_user(user_reviews):
+        tickets_reviewed_by_user = []
+        for user_review in user_reviews:
+            if user_review.ticket:
+                tickets_reviewed_by_user.append(user_review.ticket)
+        return tickets_reviewed_by_user
 
     user = request.user
     followed_users_ids = get_followed_users_ids(user)
     reviews = get_users_viewable_reviews(user, followed_users_ids)
     tickets = get_users_viewable_tickets(user, followed_users_ids)
-    tickets_reviewed_by_user = list(Ticket.objects.filter(review__ticket__user=1))
+    user_reviews = Review.objects.all().filter(user_id=user.id)
+    tickets_reviewed_by_user = get_tickets_reviewed_by_user(user_reviews)
+
+
     tickets_and_reviews = tickets + reviews
 
     posts = sorted(
@@ -56,7 +59,8 @@ def feed(request):
         reverse=True
     )
 
-    return render(request, 'feed.html', {'posts': posts,
+    return render(request, 'feed.html', {'nbar': 'feed',
+                                         'posts': posts,
                                          'tickets': tickets,
                                          'reviews': reviews,
                                          'tickets_reviewed_by_user': tickets_reviewed_by_user})
@@ -82,7 +86,7 @@ def create_ticket(request, ticket_id=None):
             obj = form.save(commit = False)
             obj.user_id = request.user.id
             obj.save()
-            return redirect('list_tickets')
+            return redirect('posts')
 
 
 def view_ticket(request, ticket_id):
@@ -93,10 +97,11 @@ def view_ticket(request, ticket_id):
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, pk=ticket_id)
     ticket.delete()
-    return redirect('list_tickets')
+    return redirect('posts')
 
 
 def followers(request):
+    nbar = 'my_followers'
     user = request.user
     subscribers = UserFollows.objects.filter(followed_user=user.id)
     subscriptions = UserFollows.objects.filter(user=user.id)
@@ -167,7 +172,7 @@ def write_review_and_ticket(request, ticket_id=None, review_id=None):
             review_obj.user_id = request.user.id
             review_obj.ticket = ticket_obj
             review_obj.save()
-            return redirect('list_tickets')
+            return redirect('posts')
 
 
 def write_review_ticket(request, ticket_id):
@@ -177,18 +182,19 @@ def write_review_ticket(request, ticket_id):
         form = ReviewForm()
         return render(request, 'write_review_ticket.html', locals())
     elif request.method == "POST":
-        form = ReviewForm(request.POST, instance=review_instance)
-        form.ticket = ticket_instance
+        form = ReviewForm(request.POST)
         if form.is_valid():
             review_obj = form.save(commit = False)
             review_obj.user_id = request.user.id
+            review_obj.ticket = ticket_instance
             review_obj.save()
-            return redirect('my_reviews')
+            return redirect('posts')
 
 
 
 def edit_review(request, review_id):
     review_instance = Review.objects.get(pk=review_id)
+    rating = review_instance.rating
     if request.method == "GET":
         form = ReviewForm(instance=review_instance)
         return render(request, 'edit_review.html', locals())
@@ -197,18 +203,37 @@ def edit_review(request, review_id):
                       instance=review_instance)
     if form.is_valid():
         form.save()
-        return redirect('my_reviews')
+        return redirect('posts')
 
 
 
 def delete_review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     review.delete()
-    return redirect('my_reviews')
+    return redirect('posts')
 
 
 
+def posts(request):
+    # get all user's reviews
+    user = request.user
+    user_reviews = Review.objects.all().filter(user_id=user.id)
+    for review in list(user_reviews):
+        review.type = 'REVIEW'
 
+    user_tickets = Ticket.objects.all().filter(user_id=user.id)
+    for ticket in list(user_tickets):
+        ticket.type = 'TICKET'
+
+    # get all user's tickets
+    tickets_reviewed_by_user = list(Ticket.objects.filter(review__ticket__user=user.id))
+    posts = sorted(
+        list(user_tickets) + list(user_reviews),
+        # tickets + reviews,
+        key=lambda post: post.time_created,
+        reverse=True
+    )
+    return render(request, 'posts.html', locals())
 
 
 

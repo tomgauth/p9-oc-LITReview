@@ -36,21 +36,23 @@
 <!--- Ticket -->
 
 <div class="card" style="">
-  {% if ticket.image %}
+  {% if review.ticket.image %}
 
-    <img class="card-img-top embed-responsive-item" src="{{ticket.image.url}}" role="img" preserveAspectRatio="xMidYMid slice"></img>
+    <img class="card-img-top embed-responsive-item" src="{{review.ticket.image.url}}" role="img" preserveAspectRatio="xMidYMid slice"></img>
 
   {% endif %}
   <div class="card-body">
     <h5 class="card-title">{{review.ticket.title}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">asked by: {{review.ticket.user}}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">asked by: {% if ticket.user == user %} You {% else %} {{ticket.user}} {% endif %}</h6>
     <p class="card-text">{{review.ticket.description}}</p>
+  </div>
+</div>
+<br>
 
 
-{% if ticket in tickets_reviewed_by_user %}
-  <p>You have already reviewed this ticket!</p>
+{% if request.resolver_match.url_name == 'feed' %}
 
-{% else %}
+  {% if review.user != user and ticket not in tickets_reviewed_by_user %}
 
     <a href="{% url 'write_review_ticket' ticket_id=1%}" >
       <button class="btn btn-primary btn-large">
@@ -58,14 +60,27 @@
       </button>
     </a>
 
+  {% endif %}
+
+{% else %}
+
+  {% if review.user == user %}
+
+  <a href="{% url 'edit_review' review_id=review.id %}" >
+      <button class="btn btn-primary btn-large">
+        Edit Review
+      </button>
+    </a>
+
+    <a href="{% url 'delete_review' review_id=review.id %}" >
+      <button class="btn btn-danger btn-large">
+        Delete Review
+      </button>
+    </a>
+
+  {% endif %}
+
 {% endif %}
 
 
-  </div>
-</div>
-
-
-
-
-<br>
 </div>
