@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from webapp.models import Ticket, UserFollows, Review
 from webapp.forms import TicketForm, UserFollowForm, ReviewForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.db.models import Value, CharField
 from django.db import IntegrityError
 from itertools import chain
@@ -9,6 +10,9 @@ from itertools import chain
 # Create your views here.
 
 
+
+
+@login_required
 def feed(request):
 
     def get_followed_users_ids(user):
@@ -65,14 +69,13 @@ def feed(request):
                                          'reviews': reviews,
                                          'tickets_reviewed_by_user': tickets_reviewed_by_user})
 
-    # return render(request, 'feed.html', context={'posts': posts})
 
 
 def list_tickets(request):
     tickets = Ticket.objects.all()
     return render(request, 'list_tickets.html', {'tickets': tickets})
 
-
+@login_required
 def create_ticket(request, ticket_id=None):
     ticket_instance = Ticket.objects.get(
         pk=ticket_id) if ticket_id is not None else None
@@ -80,26 +83,29 @@ def create_ticket(request, ticket_id=None):
         form = TicketForm(instance=ticket_instance)
         return render(request, 'create_ticket.html', locals())
     elif request.method == "POST":
+        next = request.POST.get('next', '/')
         form = TicketForm(request.POST, request.FILES,
                           instance=ticket_instance)
         if form.is_valid():
             obj = form.save(commit = False)
             obj.user_id = request.user.id
             obj.save()
-            return redirect('posts')
+            return redirect(next)
 
 
+# TODO DELETE?
 def view_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, pk=ticket_id)
     return render(request, 'view_ticket.html', locals())
 
-
+@login_required
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, pk=ticket_id)
     ticket.delete()
     return redirect('posts')
 
 
+@login_required
 def followers(request):
     nbar = 'my_followers'
     user = request.user
@@ -138,18 +144,20 @@ def followers(request):
         return render(request, 'my_followers.html', locals())
 
 
+@login_required
 def delete_user_follow(request, user_follow_id):
     user_follows = get_object_or_404(UserFollows, pk=user_follow_id)
     user_follows.delete()
     return redirect('my_followers')
 
-
+# TODO DELETE?
 def my_reviews(request):
     user = request.user
     reviews = Review.objects.all().filter(user_id=user.id)
     return render(request, 'my_reviews.html', {'reviews': reviews})
 
 
+@login_required
 def write_review_and_ticket(request, ticket_id=None, review_id=None):
     ticket_instance = Ticket.objects.get(
         pk=ticket_id) if ticket_id is not None else None
@@ -175,6 +183,7 @@ def write_review_and_ticket(request, ticket_id=None, review_id=None):
             return redirect('posts')
 
 
+@login_required
 def write_review_ticket(request, ticket_id):
     ticket_instance = Ticket.objects.get(
         pk=ticket_id)
@@ -192,6 +201,7 @@ def write_review_ticket(request, ticket_id):
 
 
 
+@login_required
 def edit_review(request, review_id):
     review_instance = Review.objects.get(pk=review_id)
     rating = review_instance.rating
@@ -207,6 +217,7 @@ def edit_review(request, review_id):
 
 
 
+@login_required
 def delete_review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     review.delete()
@@ -214,6 +225,7 @@ def delete_review(request, review_id):
 
 
 
+@login_required
 def posts(request):
     # get all user's reviews
     user = request.user

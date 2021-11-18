@@ -147,6 +147,6 @@ MEDIA_URL = '/media/'
 # AUTH_USER_MODEL = 'auth_app.User'
 
 # Redirect for logins
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/feed'
 LOGOUT_REDIRECT_URL = '/'
 

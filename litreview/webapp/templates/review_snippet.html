@@ -54,7 +54,7 @@
 
   {% if review.user != user and ticket not in tickets_reviewed_by_user %}
 
-    <a href="{% url 'write_review_ticket' ticket_id=1%}" >
+    <a href="{% url 'write_review_ticket' ticket_id=review.ticket.id%}" >
       <button class="btn btn-primary btn-large">
         Write a review
       </button>

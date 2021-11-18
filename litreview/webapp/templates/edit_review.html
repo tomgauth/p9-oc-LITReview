@@ -28,6 +28,7 @@
       <div class="container p-4 my-4 border rounded">
         <form method="post" action="{% url 'edit_review' review_id=review_instance.id %}" enctype="multipart/
         form-data">
+        <input type="hidden" name="next" value="/posts">
 
         {% csrf_token %}
 

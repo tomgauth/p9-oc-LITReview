@@ -11,7 +11,6 @@
 
     <div class="card">
 
-      {{ticket_instance.id}}
       {% if ticket_instance.image.url %}
 
         <img class="card-img-top" width="100%" src="{{ticket_instance.image.url}}" role="img" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
@@ -30,12 +29,12 @@
     <div class="container p-4 my-4 border rounded">
       <form method="post" action="{% url 'write_review_ticket' ticket_id=ticket_instance.id %}" enctype="multipart/
       form-data">
+      <input type="hidden" name="next" value="/feed">
 
       {% csrf_token %}
 
       <h2>Create review</h2>
 
-      <p>ticket: {{ticket_instance}}</p>
 
       <div class="mb-3">
 

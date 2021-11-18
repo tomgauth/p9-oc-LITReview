@@ -12,6 +12,7 @@
 
       <h2>Create ticket</h2>
       <form method="post" action="{% url 'write_review_and_ticket' %}" enctype="multipart/form-data">
+      <input type="hidden" name="next" value="/feed">
       {% csrf_token %}
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -40,8 +41,6 @@
     <div class="container p-4 my-4 border rounded">
 
       <h2>Create review</h2>
-
-      <p>ticket</p>
 
       <div class="mb-3">
 
@@ -91,9 +90,10 @@
         </div>
       </div>
 
+    </br>
+    <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 </div>

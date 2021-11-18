@@ -4,37 +4,75 @@
 
 {% block content %}
 
-{% if user.is_authenticated %}
-Hi {{ user.username }}!
-<p><a href="{% url 'logout' %}">Log Out</a></p>
-{% else %}
-
-<p>You are not logged in</p>
-<a href="{% url 'login' %}">Log In</a>
-
-{% endif %}
-
 <div class="container display: grid">
   <div class="row gx-5">
-    <div class="col">
-      <div class="p-3 border bg-light">
-        <div class="mb-3">
-          <h2>Sign-up Now</h2>
-          <a href="{% url 'signup' %}">
-            <button type="button" class="btn btn-primary">Sign Up</button>
-          </a>
-        </div>
+    {% if request.user.is_authenticated %}
 
+<div class="container p-4 my-4 border">
+
+  <h2>You're already logged in!</h2>
+
+  <a href="{% url 'logout' %}">
+  <button type="submit" class="btn btn-primary">Logout</button>
+  </a>
+
+</div>
+
+{% else %}
+    <div class="col">
+      <div class="container p-4 my-4 border">
+        <div class="p-3 border bg-light">
+          <div class="mb-3">
+            <h2>Sign-up Now</h2>
+            <a href="{% url 'signup' %}">
+              <button type="button" class="btn btn-primary">Sign Up</button>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col">
-     <div class="basic">
-      {% include "registration/login.html" with form=login %}
+
+     <div class="container p-4 my-4 border">
+
+
+
+      <div class="p-3 border bg-light">
+
+        <h2>auth_app Log In</h2>
+
+        <form method="post" action="{% url 'login' %}">
+
+          {% csrf_token %}
+
+
+          <div class="form-group">
+            <label for="UserNameInput" class="form-label">User Name</label>
+            <input type="text" class="form-control" name="username" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </br>
+      {% if error_message %}
+
+      <div class="alert alert-danger">
+        <strong> {{error_message}}</strong>
+      </div>
+
+      {% endif %}
+
+
     </div>
+
   </div>
 </div>
 </div>
+</div>
 
-
+{% endif %}
 
 {% endblock %}

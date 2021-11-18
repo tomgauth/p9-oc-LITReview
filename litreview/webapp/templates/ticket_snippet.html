@@ -22,7 +22,6 @@
       <h6>You have already reviewed this ticket</h6>
 
   {% else %}
-
       <a href="{% url 'write_review_ticket' ticket_id=ticket.id %}" >
           <button class="btn btn-primary btn-large">
               Write a review
@@ -35,31 +34,23 @@
 
     {% if ticket.user == user %}
 
-      <a href="{% url 'delete_ticket' ticket_id=ticket.id %}" >
-        <button class="btn btn-danger btn-large">
-          Delete Ticket
-        </button>
-      </a>
-
       <a href="{% url 'create_ticket' ticket_id=ticket.id%}" >
         <button class="btn btn-primary btn-large">
           Edit Ticket
         </button>
       </a>
 
+      <a href="{% url 'delete_ticket' ticket_id=ticket.id %}" >
+        <button class="btn btn-danger btn-large">
+          Delete Ticket
+        </button>
+      </a>
+
+
+
     {% endif %}
 
 {% endif %}
-
-  {# if ticket in tickets_reviewed_by_user #}
-     {# You have already reviewed this ticket  #}
-  {# else #}
-     {# [write review] #}
-
-{# elif posts #}
-
-  {# if ticket in tickets_reviewed_by_user #}
-      {# [edit ticket] [delete ticket] #}
 
 
   </div>

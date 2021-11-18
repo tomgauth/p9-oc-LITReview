@@ -15,11 +15,13 @@
 
       <h2>Modify ticket {{form.instance.id}}</h2>
       <form method="post" action="{% url 'create_ticket' ticket_id=form.instance.id %}" enctype="multipart/form-data">
+      <input type="hidden" name="next" value="/posts">
+
 
         {% else %}
         <h2>Create ticket</h2>
         <form method="post" action="{% url 'create_ticket' %}" enctype="multipart/form-data">
-
+        <input type="hidden" name="next" value="/feed">
 
           {% endif %}
 
