@@ -21,8 +21,8 @@ The Litreview app is an [MVP](https://en.wikipedia.org/wiki/Minimum_viable_produ
 Create and activate a virtual environment.
 
 ```bash
-python3 -m venv /path/to/new/virtual/environment
-source venv/bin/activate
+python3 -m venv env
+source env/bin/activate
 ```
 
 
@@ -39,7 +39,7 @@ Launch the server:
 ```bash
 python3 litreview/manage.py runserver --insecure
 ```
-Visit the website at
+Visit the website in your browser at:
 ```
 http://127.0.0.1:8000/
 ```
