@@ -10,4 +10,4 @@ def login_view(request):
         login(request, user)
         return redirect('feed')
     else:
-        return render(request, 'home.html', {'error_message':'invalid login'})
+        return render(request, 'home.html', {'error_message': 'invalid login'})

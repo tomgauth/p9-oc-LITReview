@@ -149,4 +149,3 @@ MEDIA_URL = '/media/'
 # Redirect for logins
 LOGIN_REDIRECT_URL = '/feed'
 LOGOUT_REDIRECT_URL = '/'
-

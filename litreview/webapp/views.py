@@ -3,13 +3,8 @@ from webapp.models import Ticket, UserFollows, Review
 from webapp.forms import TicketForm, UserFollowForm, ReviewForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db.models import Value, CharField
 from django.db import IntegrityError
 from itertools import chain
-
-# Create your views here.
-
-
 
 
 @login_required
@@ -22,16 +17,17 @@ def feed(request):
 
     def get_users_viewable_reviews(user, followed_users_ids):
         user_reviews = Review.objects.all().filter(user_id=user.id)
-        followed_reviews = Review.objects.all().filter(user_id__in=followed_users_ids)
+        followed_reviews = Review.objects.all().filter(
+            user_id__in=followed_users_ids)
         reviews = list(chain(user_reviews, followed_reviews))
         for review in reviews:
             review.type = 'REVIEW'
         return reviews
 
     def get_users_viewable_tickets(user, followed_users_ids):
-        user_reviews = Review.objects.all().filter(user_id=user.id)
         user_tickets = Ticket.objects.all().filter(user_id=user.id)
-        followed_tickets = Ticket.objects.all().filter(user_id__in=followed_users_ids)
+        followed_tickets = Ticket.objects.all().filter(
+            user_id__in=followed_users_ids)
         tickets = list(chain(user_tickets, followed_tickets))
 
         for ticket in tickets:
@@ -54,26 +50,19 @@ def feed(request):
     user_reviews = Review.objects.all().filter(user_id=user.id)
     tickets_reviewed_by_user = get_tickets_reviewed_by_user(user_reviews)
 
-
-    tickets_and_reviews = tickets + reviews
-
     posts = sorted(
         tickets + reviews,
         key=lambda post: post.time_created,
         reverse=True
     )
 
-    return render(request, 'feed.html', {'nbar': 'feed',
-                                         'posts': posts,
-                                         'tickets': tickets,
-                                         'reviews': reviews,
-                                         'tickets_reviewed_by_user': tickets_reviewed_by_user})
+    return render(request, 'feed.html',
+                  {'nbar': 'feed',
+                   'posts': posts,
+                   'tickets': tickets,
+                   'reviews': reviews,
+                   'tickets_reviewed_by_user': tickets_reviewed_by_user})
 
-
-
-def list_tickets(request):
-    tickets = Ticket.objects.all()
-    return render(request, 'list_tickets.html', {'tickets': tickets})
 
 @login_required
 def create_ticket(request, ticket_id=None):
@@ -87,16 +76,11 @@ def create_ticket(request, ticket_id=None):
         form = TicketForm(request.POST, request.FILES,
                           instance=ticket_instance)
         if form.is_valid():
-            obj = form.save(commit = False)
+            obj = form.save(commit=False)
             obj.user_id = request.user.id
             obj.save()
             return redirect(next)
 
-
-# TODO DELETE?
-def view_ticket(request, ticket_id):
-    ticket = get_object_or_404(Ticket, pk=ticket_id)
-    return render(request, 'view_ticket.html', locals())
 
 @login_required
 def delete_ticket(request, ticket_id):
@@ -113,21 +97,25 @@ def followers(request):
     subscriptions = UserFollows.objects.filter(user=user.id)
     user_follow_instance = UserFollows()
     found_user = ""
+
     if request.method == "GET":
         form = UserFollowForm()
         # get the ids of users already followed
-        already_followed = [
-            pair.followed_user.id for pair in UserFollows.objects.filter(user=user)]
-        # remove the already followed users and the current user from the options
-        options = User.objects.all().exclude(id__in=already_followed).exclude(id=user.id)
+        user_follows = UserFollows.objects.filter(user=user)
+        already_followed = [pair.followed_user.id for pair in user_follows]
+        # remove the already followed users and the current user
+        # from the options
+        options = User.objects.all().exclude(
+            id__in=already_followed).exclude(id=user.id)
+
         result_list = list(chain(options, already_followed))
         form.fields['followed_user'].queryset = options
         return render(request, 'my_followers.html', locals())
+
     elif request.method == "POST":
-        already_followed = [
-            pair.followed_user.id for pair in UserFollows.objects.filter(user=user)]
+        user_follows = UserFollows.objects.filter(user=user)
+        already_followed = [pair.followed_user.id for pair in user_follows]
         searched = request.POST['searched']
-        # users = options.get(username__contains=searched)
         try:
             found_user = User.objects.get(username__iexact=searched)
             user_follow_instance.user = user
@@ -150,12 +138,6 @@ def delete_user_follow(request, user_follow_id):
     user_follows.delete()
     return redirect('my_followers')
 
-# TODO DELETE?
-def my_reviews(request):
-    user = request.user
-    reviews = Review.objects.all().filter(user_id=user.id)
-    return render(request, 'my_reviews.html', {'reviews': reviews})
-
 
 @login_required
 def write_review_and_ticket(request, ticket_id=None, review_id=None):
@@ -169,14 +151,14 @@ def write_review_and_ticket(request, ticket_id=None, review_id=None):
         return render(request, 'write_review_and_ticket.html', locals())
     elif request.method == "POST":
         ticket_form = TicketForm(request.POST, request.FILES,
-                          instance=ticket_instance)
+                                 instance=ticket_instance)
         review_form = ReviewForm(request.POST, request.FILES,
-                          instance=review_instance)
+                                 instance=review_instance)
         if ticket_form.is_valid() and review_form.is_valid():
-            ticket_obj = ticket_form.save(commit = False)
+            ticket_obj = ticket_form.save(commit=False)
             ticket_obj.user_id = request.user.id
             ticket_obj.save()
-            review_obj = review_form.save(commit = False)
+            review_obj = review_form.save(commit=False)
             review_obj.user_id = request.user.id
             review_obj.ticket = ticket_obj
             review_obj.save()
@@ -193,12 +175,11 @@ def write_review_ticket(request, ticket_id):
     elif request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            review_obj = form.save(commit = False)
+            review_obj = form.save(commit=False)
             review_obj.user_id = request.user.id
             review_obj.ticket = ticket_instance
             review_obj.save()
             return redirect('posts')
-
 
 
 @login_required
@@ -210,11 +191,10 @@ def edit_review(request, review_id):
         return render(request, 'edit_review.html', locals())
     elif request.method == "POST":
         form = ReviewForm(request.POST,
-                      instance=review_instance)
+                          instance=review_instance)
     if form.is_valid():
         form.save()
         return redirect('posts')
-
 
 
 @login_required
@@ -222,7 +202,6 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     review.delete()
     return redirect('posts')
-
 
 
 @login_required
@@ -238,7 +217,8 @@ def posts(request):
         ticket.type = 'TICKET'
 
     # get all user's tickets
-    tickets_reviewed_by_user = list(Ticket.objects.filter(review__ticket__user=user.id))
+    tickets_reviewed_by_user = list(
+        Ticket.objects.filter(review__ticket__user=user.id))
     posts = sorted(
         list(user_tickets) + list(user_reviews),
         # tickets + reviews,
@@ -246,6 +226,3 @@ def posts(request):
         reverse=True
     )
     return render(request, 'posts.html', locals())
-
-
-
