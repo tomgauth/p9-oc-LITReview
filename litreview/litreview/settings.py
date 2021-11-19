@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '8@3%v5muh)!lr*rv-_r57@d%wvawvndpv(jm#k#+da0%*xiqdg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'webapp',
     'auth_app',
     'accounts',
-    'bootstrap5'
 ]
 
 MIDDLEWARE = [
@@ -143,5 +142,6 @@ MEDIA_URL = '/media/'
 # AUTH_USER_MODEL = 'auth_app.User'
 
 # Redirect for logins
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/feed'
 LOGOUT_REDIRECT_URL = '/'
