@@ -16,6 +16,20 @@ The Litreview app is an [MVP](https://en.wikipedia.org/wiki/Minimum_viable_produ
 - See their posts and the posts from users they follow
 
 
+## Admins can:
+
+- Login as an admin to the admin area
+```
+http://127.0.0.1:8000/admin/login
+```
+- Create, update, edit, delete any:
+  - Ticket
+  - Review
+  - User
+  - Following connection (User following another)
+
+
+
 ## Installation
 
 Create and activate a virtual environment.
